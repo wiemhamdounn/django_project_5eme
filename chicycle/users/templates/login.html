@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #65412b, #d6c9c4);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+
+        h1 {
+            color: #65412b;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+        }
+
+
+        label {
+            font-weight: bold;
+            color: #65412b;
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #d6c9c4;
+            border-radius: 8px;
+            background: #f5f5f5;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #65412b;
+            background: #fff;
+            box-shadow: 0 0 8px rgba(101, 65, 43, 0.2);
+            outline: none;
+        }
+
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #65412b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+
+        button:hover {
+            background: #a0522d;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+
+        .error {
+            background: #ffefef;
+            color: #d9534f;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #d9534f;
+        }
+
+
+        .register-link {
+            display: block;
+            margin-top: 20px;
+            color: #65412b;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+
+        .register-link:hover {
+            color: #a0522d;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Welcome Back</h1>
+       
+        {% if form.errors %}
+            <div class="error">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" placeholder="Enter your username" required>
+
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+
+
+            <button type="submit">Login</button>
+        </form>
+
+
+        <a href="{% url 'register' %}" class="register-link">Don't have an account? Register here</a>
+    </div>
+</body>
+</html>

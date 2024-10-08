@@ -1,0 +1,55 @@
+{% extends 'base_admin.html' %}
+
+
+{% block title %}Update User - Admin Dashboard{% endblock %}
+
+
+{% block content %}
+  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">Update User</h1>
+
+
+  <div style="max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <form method="POST">
+      {% csrf_token %}
+      <div style="margin-bottom: 15px;">
+        <label for="username" style="display: block; color: #65412b; font-weight: bold; margin-bottom: 5px;">Username</label>
+        <input type="text" name="username" id="username" value="{{ form.username.value }}" class="form-control" style="width: 100%; padding: 10px; border: 1px solid #d6c9c4; border-radius: 4px;" required>
+        {% if form.username.errors %}
+          <span style="color: red; font-size: 12px;">{{ form.username.errors }}</span>
+        {% endif %}
+      </div>
+
+
+      <div style="margin-bottom: 15px;">
+        <label for="email" style="display: block; color: #65412b; font-weight: bold; margin-bottom: 5px;">Email</label>
+        <input type="email" name="email" id="email" value="{{ form.email.value }}" class="form-control" style="width: 100%; padding: 10px; border: 1px solid #d6c9c4; border-radius: 4px;" required>
+        {% if form.email.errors %}
+          <span style="color: red; font-size: 12px;">{{ form.email.errors }}</span>
+        {% endif %}
+      </div>
+
+
+      <div style="margin-bottom: 15px;">
+        <label for="role" style="display: block; color: #65412b; font-weight: bold; margin-bottom: 5px;">Role</label>
+        <select name="role" id="role" class="form-control" style="width: 100%; padding: 10px; border: 1px solid #d6c9c4; border-radius: 4px;">
+          <option value="user" {% if form.role.value == "user" %}selected{% endif %}>User</option>
+          <option value="admin" {% if form.role.value == "admin" %}selected{% endif %}>Admin</option>
+          <option value="superadmin" {% if form.role.value == "superadmin" %}selected{% endif %}>Superadmin</option>
+        </select>
+        {% if form.role.errors %}
+          <span style="color: red; font-size: 12px;">{{ form.role.errors }}</span>
+        {% endif %}
+      </div>
+
+
+      <div style="text-align: center; margin-top: 20px;">
+        <button type="submit" style="background-color: #65412b; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Save Changes</button>
+        <a href="{% url 'get_all_users' %}" style="margin-left: 10px; text-decoration: none; color: #65412b;">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+
+
+  

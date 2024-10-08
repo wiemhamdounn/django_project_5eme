@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ebe6e4;
+      /* Beige très clair pour le fond */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+      overflow: hidden;
+    }
+
+    header {
+      background: #65412b;
+      /* Marron pour le header */
+      color: #fff;
+      padding: 20px;
+      min-height: 70px;
+      border-bottom: #d6c9c4 3px solid;
+      /* Beige rosé pour la bordure */
+    }
+
+    header h1 {
+      float: left;
+      margin: 0;
+    }
+
+    header ul {
+      float: right;
+      padding: 0;
+      list-style: none;
+    }
+
+    header ul li {
+      display: inline-block;
+      margin-left: 20px;
+    }
+
+    header ul li a,
+    header ul li form button {
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .content {
+      background: #fff;
+      padding: 50px;
+      margin-top: 30px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      min-height: 400px;
+    }
+
+    .content h1 {
+      margin-bottom: 20px;
+      color: #65412b;
+    }
+
+    .content p {
+      margin-bottom: 30px;
+      color: #65412b;
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 50px;
+    }
+
+    .quick-links a {
+      display: block;
+      background-color: #d6c9c4;
+      /* Beige rosé pour le fond des cartes */
+      color: #65412b;
+      /* Marron pour le texte */
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 2px solid #65412b;
+      /* Bordure marron pour le contraste */
+      position: relative;
+    }
+
+    .quick-links a h3 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+
+    .quick-links a p {
+      font-size: 14px;
+      margin: 0;
+      opacity: 0;
+      /* Masqué par défaut */
+      transition: opacity 0.3s ease;
+    }
+
+    .quick-links a:hover p {
+      opacity: 1;
+      /* Affiche la description au survol */
+    }
+
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #65412b;
+      /* Marron pour le footer */
+      color: #fff;
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #65412b;
+      /* Marron pour les boutons */
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d6c9c4;
+      /* Beige rosé au survol */
+      color: #65412b;
+      /* Changer le texte au marron lors du survol */
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 768px) {
+
+      header h1,
+      header ul {
+        float: none;
+        text-align: center;
+      }
+
+      header ul {
+        margin-top: 20px;
+      }
+
+      .quick-links {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      {% load static %}
+      <img src="{% static 'assets/LogoWhite.png' %}" width="170px" height="80px">
+      <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Profile</a></li>
+        <li>
+          <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="container content">
+    <h1>Welcome, Admin</h1>
+    <p>This is your admin dashboard. Here you can manage users, view statistics, and configure system settings.</p>
+
+    <section>
+      <h2>Quick Links</h2>
+      <div class="quick-links">
+        <a href="{% url 'get_all_users' %}">
+          <h3>User Management</h3>
+          <p>Manage all registered users and their permissions.</p>
+        </a>
+        <a href="#">
+          <h3>Product Management</h3>
+          <p>Manage and organize products in your store.</p>
+        </a>
+        <a href="#">
+          <h3>Category Management</h3>
+          <p>Create, update, and delete product categories.</p>
+        </a>
+        <a href="#">
+          <h3>Feedback Management</h3>
+          <p>Read and respond to product reviews and feedback.</p>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>Admin Dashboard - &copy; 2024</p>
+  </footer>
+</body>
+
+</html>
