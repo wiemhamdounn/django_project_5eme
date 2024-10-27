@@ -38,7 +38,8 @@
         display: inline-block;
         margin-left: 20px;
       }
-      header ul li a, header ul li form button {
+      header ul li a,
+      header ul li form button {
         color: #fff;
         text-decoration: none;
         text-transform: uppercase;
@@ -74,7 +75,8 @@
         color: #65412b; /* Changer le texte au marron lors du survol */
       }
       @media (max-width: 768px) {
-        header h1, header ul {
+        header h1,
+        header ul {
           float: none;
           text-align: center;
         }
@@ -89,11 +91,17 @@
     <header>
       <div class="container">
         {% load static %}
-        <img src="{% static 'assets/LogoWhite.png' %}" width="170px" height="80px">
-     
+        <img
+          src="{% static 'assets/LogoWhite.png' %}"
+          width="170px"
+          height="80px"
+        />
+
         <ul>
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a href="{% url 'profile' %}">Profile</a></li>
+          <li><a href="{% url 'user_dashboard'%}">Home</a></li>
+          <li><a href="{% url 'user_profile' %}">Profile</a></li>
+          <li><a href="{% url 'blog_create' %}">blog</a></li>
+
           <li>
             <form method="POST" action="{% url 'logout' %}">
               {% csrf_token %}

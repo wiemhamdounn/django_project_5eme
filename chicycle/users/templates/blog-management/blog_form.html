@@ -1,0 +1,177 @@
+{% extends 'base_user.html' %} {% block content %}
+<div class="container mt-5">
+  <!-- Header Section -->
+  <div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+      <h1
+        class="display-4 fw-bold text-primary animate__animated animate__fadeInDown"
+      >
+        {% if form.instance.pk %} Modifier l'article {% else %} Créer un nouvel
+        article {% endif %}
+      </h1>
+      <p class="text-muted animate__animated animate__fadeInUp">
+        {% if form.instance.pk %} Mettez à jour votre article pour corriger ou
+        ajouter des informations. {% else %} Commencez à partager vos idées avec
+        le monde. {% endif %}
+      </p>
+      <hr class="my-4" />
+    </div>
+  </div>
+
+  <!-- User Authentication Greeting -->
+  {% if request.user.is_authenticated %}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div
+        class="alert alert-info text-center shadow-lg animate__animated animate__fadeIn"
+      >
+        {% if request.user.is_superuser %}
+        <i class="bi bi-shield-lock-fill"></i>
+        <strong>Bienvenue, admin {{ request.user.username }}!</strong> Vous avez
+        accès à toutes les fonctionnalités. {% else %}
+        <i class="bi bi-person-circle"></i>
+        <strong>Bienvenue, {{ request.user.username }}!</strong> Profitez de
+        votre espace de création. {% endif %}
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div
+        class="alert alert-warning text-center shadow-lg animate__animated animate__shakeX"
+      >
+        <p>Veuillez vous connecter pour créer ou modifier un article.</p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Article Form -->
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+      {% if request.user.is_authenticated %}
+      <div class="card shadow-lg border-0 animate__animated animate__zoomIn">
+        <div class="card-body p-5">
+          <form method="post">
+            {% csrf_token %} {{ form.as_p }}
+
+            <div class="d-flex justify-content-between mt-3">
+              <button type="submit" class="btn btn-primary btn-lg shadow">
+                {% if form.instance.pk %}
+                <i class="bi bi-save-fill"></i> Mettre à jour {% else %}
+                <i class="bi bi-plus-circle-fill"></i> Créer {% endif %}
+              </button>
+
+              <a
+                href="{% url 'list_blogs' %}"
+                class="btn btn-secondary btn-lg shadow"
+              >
+                <i class="bi bi-x-circle-fill"></i> Annuler
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <a
+        href="{% url 'login' %}"
+        class="btn btn-outline-primary btn-lg d-block mt-4 shadow"
+      >
+        <i class="bi bi-box-arrow-in-right"></i> Connectez-vous pour créer un
+        article
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Footer Section with extra information -->
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center">
+      <p class="text-muted animate__animated animate__fadeInUp">
+        Restez inspiré et partagez vos idées avec la communauté.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Styles personnalisés -->
+<style>
+  /* Styles pour améliorer l'apparence */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .display-4 {
+    font-weight: bold;
+    color: #3498db; /* Bleu primaire */
+  }
+
+  .text-primary {
+    color: #3498db;
+  }
+
+  .btn-primary {
+    background-color: #3498db;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #2980b9;
+  }
+
+  .btn-secondary {
+    background-color: #7f8c8d;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-secondary:hover {
+    background-color: #95a5a6;
+  }
+
+  .btn-outline-primary {
+    border-color: #3498db;
+    color: #3498db;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #3498db;
+    color: #fff;
+  }
+
+  .alert {
+    font-size: 1.2em;
+  }
+
+  .card {
+    border-radius: 12px;
+  }
+
+  .card-body {
+    padding: 30px;
+  }
+
+  /* Animations pour une meilleure interaction utilisateur */
+  .animate__animated {
+    animation-duration: 0.8s;
+  }
+
+  /* Transition douce sur les boutons */
+  .btn {
+    transition: transform 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-3px);
+  }
+
+  hr {
+    border-top: 2px solid #bdc3c7;
+    width: 80%;
+    margin: 20px auto;
+  }
+</style>
+{% endblock %}

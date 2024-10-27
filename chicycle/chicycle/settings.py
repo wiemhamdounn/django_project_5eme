@@ -17,7 +17,11 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -40,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+     'axes',
+
 
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -56,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware',
+
 ]
 
 ROOT_URLCONF = 'chicycle.urls'
@@ -134,3 +142,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+# Nombre maximum de tentatives de connexion échouées avant de bloquer l'utilisateur ou l'IP
+AXES_FAILURE_LIMIT = 5
+
+# Temps de blocage pour l'adresse IP ou l'utilisateur (en secondes)
+AXES_COOLOFF_TIME = 24 * 3600  # 24 heures
+
+# Bloquer par IP ou par utilisateur
+AXES_ONLY_USER_FAILURES = False  # Bloquer par IP (False) ou par utilisateur (True)
+AXES_COOLOFF_TIME = 1  # Temps de blocage d'une heure
+AXES_LOCKOUT_TEMPLATE = 'failure.html'  # Page à afficher lorsque l'utilisateur est bloqué
+AXES_USE_USER_AGENT = True  # Utiliser le User-Agent pour identifier les tentatives

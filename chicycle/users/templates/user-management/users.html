@@ -1,48 +1,192 @@
-{% extends 'base_admin.html' %}
+{% extends 'base_admin.html' %} {% block title %}All Users - Admin Dashboard
+{%endblock %} {% block content %}
+<h1
+  style="
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 600;
+  "
+>
+  User Management
+</h1>
 
-{% block title %}All Users - Admin Dashboard{% endblock %}
-
-{% block content %}
-  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">All Users</h1>
-  <div style="overflow-x: auto; margin-bottom: 30px;">
-    <table style="width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <thead>
-        <tr style="background-color: #65412b; color: #ebe6e4;">
-          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">ID</th>
-          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Username</th>
-          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Email</th>
-          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Role</th>
-          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Status</th>
-          <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in users %}
-        <tr style="border-bottom: 1px solid #d6c9c4;">
-          <td style="padding: 10px;">{{ user.id }}</td>
-          <td style="padding: 10px;">{{ user.username }}</td>
-          <td style="padding: 10px;">{{ user.email }}</td>
-          <td style="padding: 10px;">{{ user.role }}</td>
-          <td style="padding: 10px;">
-            <span style="color: {% if user.is_active %}green{% else %}red{% endif %}; font-weight: bold;">
-              {{ user.is_active|yesno:"Active,Banned" }}
-            </span>
-          </td>
-          <td style="padding: 10px; text-align: center;">
-            <a href="{% url 'update_user' user.id %}" style="color: #65412b; text-decoration: none; margin-right: 10px;">Update</a>
-            {% if user.is_active %}
-              <a href="{% url 'ban_user' user.id %}" style="color: red; text-decoration: none;">Ban</a>
-            {% else %}
-              <a href="{% url 'unban_user' user.id %}" style="color: green; text-decoration: none;">Unban</a>
-            {% endif %}
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6" style="text-align: center; padding: 20px; color: #65412b; background-color: #f9f9f9;">No users found.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<div class="card-container">
+  {% for user in users %}
+  <div class="user-card shadow-sm">
+    <div class="user-card-body">
+      <!-- Ajoutez l'image de profil de l'utilisateur en cercle -->
+      <div class="profile-pic-container">
+        <img
+          src="{{ user.image.url }}"
+          alt="Profile Image of {{ user.username }}"
+          class="profile-pic"
+        />
+      </div>
+      <h5 class="user-name">{{ user.username }}</h5>
+      <p class="user-info">
+        <strong>ID:</strong> {{ user.id }} <br />
+        <strong>Email:</strong> {{ user.email }} <br />
+        <strong>Role:</strong> {{ user.role }} <br />
+        <span
+          class="status-badge {% if user.is_active %}active{% else %}banned{% endif %}"
+        >
+          {{ user.is_active|yesno:"Active,Banned" }}
+        </span>
+      </p>
+    </div>
+    <div class="user-card-footer">
+      <a href="{% url 'update_user' user.id %}" class="action-btn update">
+        ✏️ Modifier
+      </a>
+      {% if user.is_active %}
+      <a href="{% url 'ban_user' user.id %}" class="action-btn ban">
+        🚫 Bannir
+      </a>
+      {% else %}
+      <a href="{% url 'unban_user' user.id %}" class="action-btn unban">
+        ✅ Débannir
+      </a>
+      {% endif %}
+    </div>
   </div>
+  {% empty %}
+  <p class="no-data">No users found.</p>
+  {% endfor %}
+</div>
+
+<!-- Styles CSS pour les cartes et les images en cercle -->
+<style>
+  body {
+    background: linear-gradient(-45deg, #34495e, #ecf0f1);
+    background-size: 400% 400%;
+    animation: gradientBG 12s ease infinite;
+  }
+
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .user-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .user-name {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  .user-info {
+    margin: 10px 0;
+    color: #7f8c8d;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  .status-badge.active {
+    background-color: #27ae60;
+    color: #fff;
+  }
+
+  .status-badge.banned {
+    background-color: #e74c3c;
+    color: #fff;
+  }
+
+  .user-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .action-btn {
+    text-decoration: none;
+    color: #2c3e50;
+    background: #ecf0f1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+    font-size: 0.9em;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .action-btn.update:hover {
+    background-color: #2980b9;
+    color: #fff;
+  }
+
+  .action-btn.ban:hover {
+    background-color: #e74c3c;
+    color: #fff;
+  }
+
+  .action-btn.unban:hover {
+    background-color: #27ae60;
+    color: #fff;
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 20px;
+    color: #2c3e50;
+    font-weight: bold;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+
+  /* Styles pour les images de profil circulaires */
+  .profile-pic-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+</style>
 {% endblock %}

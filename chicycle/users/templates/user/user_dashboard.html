@@ -37,7 +37,8 @@
         display: inline-block;
         margin-left: 20px;
       }
-      header ul li a, header ul li form button {
+      header ul li a,
+      header ul li form button {
         color: #fff;
         text-decoration: none;
         text-transform: uppercase;
@@ -126,7 +127,8 @@
         color: #65412b; /* Changer le texte au marron lors du survol */
       }
       @media (max-width: 768px) {
-        header h1, header ul {
+        header h1,
+        header ul {
           float: none;
           text-align: center;
         }
@@ -149,10 +151,16 @@
     <header>
       <div class="container">
         {% load static %}
-        <img src="{% static 'assets/LogoWhite.png' %}" width="170px" height="80px">
+        <img
+          src="{% static 'assets/LogoWhite.png' %}"
+          width="170px"
+          height="80px"
+        />
         <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Profile</a></li>
+          <li><a href="{% url 'user_dashboard' %}">Home</a></li>
+          <li><a href="{% url 'user_profile' %}">Profile</a></li>
+          <li><a href="{% url 'list_blogs' %}">blog</a></li>
+
           <li>
             <form method="POST" action="{% url 'logout' %}">
               {% csrf_token %}
@@ -166,14 +174,15 @@
     <div class="container content">
       <h1>Welcome, {{ request.user.username }}</h1>
       <p>
-        Welcome to your dashboard! Here, you can add new clothing items to your listings, browse and buy from a wide range of products, and stay up-to-date with reviews from other customers.
+        Welcome to your dashboard! Here, you can add new clothing items to your
+        listings, browse and buy from a wide range of products, and stay
+        up-to-date with reviews from other customers.
       </p>
-      
 
       <div class="images">
-        <img src="{% static 'assets/img1.png' %}" alt="Image 1">
-        <img src="{% static 'assets/img2.png' %}" alt="Image 2">
-        <img src="{% static 'assets/img3.png' %}" alt="Image 3">
+        <img src="{% static 'assets/img1.png' %}" alt="Image 1" />
+        <img src="{% static 'assets/img2.png' %}" alt="Image 2" />
+        <img src="{% static 'assets/img3.png' %}" alt="Image 3" />
       </div>
 
       <section>
