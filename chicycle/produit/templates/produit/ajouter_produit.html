@@ -1,0 +1,17 @@
+
+{% extends 'base_admin.html' %}
+
+{% block title %}All Products - Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<h1>Ajouter un produit</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <button type="submit" name="ajouter">Ajouter le produit</button>
+</form>
+<a href="{% url 'liste_produits' %}">Annuler</a>
+{% endblock %}

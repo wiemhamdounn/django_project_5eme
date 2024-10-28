@@ -1,13 +1,14 @@
 
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from django.contrib.auth.views import LogoutView
 from users import views
 from users import viewsBlog  # Importation des vues du blog
 from django.conf import settings
 from django.conf.urls.static import static
 from users.viewsAvis import creer_avis, modifier_avis, supprimer_avis, liste_avis ,user_avis,detail_avis ,creer_reponse,modifier_reponse,supprimer_reponse
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -53,6 +54,10 @@ urlpatterns = [
     path('users/update/<int:user_id>/', views.update_user, name='update_user'),  # URL pour mettre à jour un utilisateur
     path('users/ban/<int:user_id>/', views.ban_user, name='ban_user'),  # URL pour bannir un utilisateur
     path('users/unban/<int:user_id>/', views.unban_user, name='unban_user'),  # URL pour débannir un utilisateur
+
+    #Product + categories
+    path('produits/', include('produit.urls')),
+    path('categories/', include('categories.urls')), 
 ]
 
 if settings.DEBUG:
