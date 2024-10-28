@@ -41,20 +41,23 @@ def creer_avis(request):
             avis.utilisateur = request.user  # Lier l'avis à l'utilisateur connecté
             avis.save()
 
-         
+            # Gérer les messages de feedback selon le sentiment
             if avis.sentiment == 'Positive':
                 messages.success(request, 'Thank you for your positive feedback! 😊 We''re glad you had a great experience.')
             elif avis.sentiment == 'Neutral':
                 messages.info(request, 'Thank you for your feedback! 😐 We''re always looking to improve.')
             elif avis.sentiment == 'Negative':
                 messages.warning(request, 'We''re sorry to hear about your experience. 😔 We''ll strive to do better next time.')
-            #  messages.success(request, 'Votre avis a bien été ajouté !')
-
-            return redirect('user_avis')  # Rediriger vers la liste des avis de l'utilisateur
+            
+            return redirect('user_avis')  # Redirection vers la liste des avis
+        else:
+            # Affiche les erreurs du formulaire pour comprendre ce qui ne va pas
+            print(form.errors)
     else:
         form = AvisForm()
 
     return render(request, 'avis/creer_avis.html', {'form': form})
+
 
 
 def modifier_avis(request, avis_id):

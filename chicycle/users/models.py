@@ -65,8 +65,8 @@ class Avis(models.Model):
     def clean(self):
         if self.note is None or not (1 <= self.note <= 5):
             raise ValidationError('The rating must be between 1 and 5.')
-        if not self.commentaire or len(self.commentaire) < 10:
-            raise ValidationError('The comment must be at least 10 characters long.')
+        if not self.commentaire or len(self.commentaire) < 5:
+            raise ValidationError('The comment must be at least 5 characters long.')
 
     def save(self, *args, **kwargs):
         # Analyser le commentaire avec VADER
