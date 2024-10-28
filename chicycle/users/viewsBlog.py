@@ -39,7 +39,6 @@ def blog_create(request):
                 
                 if label == 'toxic' and score > 0.5:  # Ajustez le seuil si nécessaire
                     offensive_message = f"Le contenu est toxique avec un score de {score:.2f}."
-                    messages.error(request, offensive_message)
                     return render(request, 'blog-management/blog_form.html', {'form': form, 'offensive_message': offensive_message})
 
             post.excerpt = generate_excerpt(post.content)  # Génération de l'extrait
@@ -52,7 +51,6 @@ def blog_create(request):
             # Mettre à jour le badge et le rôle en fonction des nouveaux points
             update_user_badge_and_role(request.user)
 
-            messages.success(request, 'Article créé avec succès.')
             return redirect('list_blogs')
     else:
         form = BlogPostForm()
@@ -71,7 +69,6 @@ def blog_update(request, pk):
         form = BlogPostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Article mis à jour avec succès.')
             return redirect('blog_detail', pk=pk)
     else:
         form = BlogPostForm(instance=post)
@@ -83,7 +80,6 @@ def blog_delete(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     if request.method == 'POST':
         post.delete()
-        messages.success(request, 'Article supprimé avec succès.')
         return redirect('list_blogs')
     return render(request, 'blog-management/blog_confirm_delete.html', {'post': post})
 
@@ -105,13 +101,11 @@ def generate_excerpt_view(request, post_id):
     """
     post = get_object_or_404(BlogPost, id=post_id)
 
-    try:
+   
         # Utilisation de la fonction generate_excerpt pour créer un extrait
-        post.excerpt = generate_excerpt(post.content)
-        post.save()
-        messages.success(request, 'Extrait généré avec succès.')
-    except Exception as e:
-        messages.error(request, f'Erreur lors de la génération de l\'extrait : {e}')
+    post.excerpt = generate_excerpt(post.content)
+    post.save()
+       
     
 def detect_offensive_language(text):
     result = classifier(text)

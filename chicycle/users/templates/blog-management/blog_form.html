@@ -3,12 +3,7 @@
   <!-- Header Section -->
   <div class="row justify-content-center">
     <div class="col-md-8 text-center">
-      <h1
-        class="display-4 fw-bold text-primary animate__animated animate__fadeInDown"
-      >
-        {% if form.instance.pk %} Modifier l'article {% else %} Créer un nouvel
-        article {% endif %}
-      </h1>
+      
       {% if offensive_detected %}
       <p style="color: red">Le contenu soumis contenait des mots offensants.</p>
       {% endif %}
@@ -119,13 +114,13 @@
   }
 
   .btn-primary {
-    background-color: #3498db;
+    background-color: #6f4c3e;
     border: none;
     transition: background-color 0.3s ease;
   }
 
   .btn-primary:hover {
-    background-color: #2980b9;
+    background-color: #6f4c3e;
   }
 
   .btn-secondary {
