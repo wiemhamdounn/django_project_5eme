@@ -1,0 +1,93 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}All Feedbacks - Admin Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">Feedback List</h1>
+  
+  <!-- Table des avis -->
+  <div style="overflow-x: auto; margin-bottom: 30px;">
+    <table style="width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <thead>
+          <tr style="background-color: #65412b; color: #ebe6e4;">
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">User</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Product</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Comment</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Rating</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Sentiment</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Date</th>
+            <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for avis_item in avis %}
+          <tr style="border-bottom: 1px solid #d6c9c4;">
+            <td style="padding: 10px;">{{ avis_item.utilisateur }}</td>
+            <td style="padding: 10px;">{{ avis_item.produit }}</td>
+            <td style="padding: 10px;">{{ avis_item.commentaire }}</td>
+            <td style="padding: 10px;">{{ avis_item.note }} / 5</td>
+            <td style="padding: 10px;">
+              <span>
+                {{ avis_item.sentiment }}
+              </span>
+            </td>
+            <td style="padding: 10px;">{{ avis_item.date_creation }}</td>
+            <td style="padding: 10px; text-align: center;">
+              <a href="{% url 'modifier_avis' avis_item.id %}" style="color: #65412b; text-decoration: none; margin-right: 10px;">Edit</a>
+              <a href="{% url 'detail_avis' avis_item.id %}" style="color: #65412b; text-decoration: none; margin-right: 10px;">Details</a>
+              <a href="{% url 'supprimer_avis' avis_item.id %}" style="color: red; text-decoration: none;">Delete</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 20px; color: #65412b; background-color: #f9f9f9;">No feedback yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+
+  <!-- Section du graphique -->
+  <div style="max-width: 800px; margin: 0 auto;">
+    <h2 style="text-align: center; color: #65412b; margin-bottom: 20px;">Product Ratings Overview</h2>
+    <canvas id="ratingsChart"></canvas>  <!-- Canvas pour le graphique -->
+  </div>
+
+  <!-- Transférer les données des produits et notes avec json_script -->
+  {{ products|json_script:"products-data" }}
+  {{ ratings|json_script:"ratings-data" }}
+
+  <!-- Inclusion de Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Récupérer les données JSON des produits et évaluations
+      const products = JSON.parse(document.getElementById('products-data').textContent);
+      const ratings = JSON.parse(document.getElementById('ratings-data').textContent);
+
+      const ctx = document.getElementById('ratingsChart').getContext('2d');
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: products,  // Noms des produits
+          datasets: [{
+            label: 'Product Ratings',
+            data: ratings,  // Évaluations (notes)
+            backgroundColor: 'rgba(101, 65, 43, 0.8)',  // Couleur personnalisée pour les barres
+            borderColor: 'rgba(101, 65, 43, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 5  // Limite maximale de l'échelle des notes
+            }
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}

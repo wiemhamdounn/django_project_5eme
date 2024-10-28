@@ -1,0 +1,52 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}All Feedbacks - Admin Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">Your Feedbacks</h1>
+  <div style="overflow-x: auto; margin-bottom: 30px;">
+    <table style="width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <thead>
+          <tr style="background-color: #65412b; color: #ebe6e4;">
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">User</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Product</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Comment</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Rating</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Sentiment</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Date</th>
+            <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for avis_item in avis %}
+          <tr style="border-bottom: 1px solid #d6c9c4;">
+            <td style="padding: 10px;">{{ avis_item.utilisateur }}</td>
+            <td style="padding: 10px;">{{ avis_item.produit }}</td>
+            <td style="padding: 10px;">{{ avis_item.commentaire }}</td>
+            <td style="padding: 10px;">{{ avis_item.note }} / 5</td>
+            <td style="padding: 10px;">
+              <span >
+                {{ avis_item.sentiment }}
+              </span>
+            </td>
+            <td style="padding: 10px;">{{ avis_item.date_creation }}</td>
+            <td style="padding: 10px; text-align: center;">
+              <a href="{% url 'detail_avis' avis_item.id %}" style="color: #65412b; text-decoration: none; margin-right: 10px;">Details</a>
+       
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 20px; color: #65412b; background-color: #f9f9f9;">You haven't left any feedback yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+  </div>
+  <div style="text-align: center;">
+    <a href="{% url 'creer_avis' %}" style="background-color: #65412b; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+      Add New Feedback
+    </a>
+  </div>
+{% endblock %}

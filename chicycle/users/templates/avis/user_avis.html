@@ -1,0 +1,84 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}My Feedback List{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">My Feedback List</h1>
+  <div style="text-align: center;">
+    <a href="{% url 'creer_avis' %}" style="background-color: #65412b; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+      Add New Feedback
+    </a>
+  </div>
+  {% if messages %}
+  <div style="max-width: 600px; margin: 20px auto;">
+      {% for message in messages %}
+          <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+              {{ message }}
+          </div>
+      {% endfor %}
+  </div>
+{% endif %}
+
+
+
+
+  {% if avis_list %}
+    <div style="max-width: 800px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+      
+      {% for avis in avis_list %}
+        <!-- Carte pour chaque avis -->
+        <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+          <h3>{{ avis.produit }}</h3>
+          <p><strong>Commentaire:</strong> {{ avis.commentaire }}</p>
+          <p><strong>Note:</strong> {{ avis.note }} / 5</p>
+          <p><strong>Date:</strong> {{ avis.date_creation }}</p>
+
+          <!-- Affichage des réponses s'il y en a -->
+          <h4>Réponses :</h4>
+          {% if avis.reponses.all %}
+            <ul style="list-style-type: none; padding-left: 0;">
+              {% for reponse in avis.reponses.all %}
+                <li style="margin-bottom: 10px; background-color: #ecf0f1; padding: 10px; border-radius: 5px;">
+                  <p><strong>{{ reponse.utilisateur.username }}</strong> replied :</p>
+                  <p>{{ reponse.commentaire }}</p>
+                  <p style="font-size: 12px; color: #888;">{{ reponse.date_creation }}</p>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p style="color: #888;">No response for this feedback.</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="text-align: center; color: #888;">You haven't left any feedbacks yet.
+    </p>
+  {% endif %}
+  <style>
+    .message {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.message.success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.message.info {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+.message.warning {
+    background-color: #fcf8e3;
+    color: #812727;
+}
+
+
+  </style>
+{% endblock %}

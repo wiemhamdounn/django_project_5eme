@@ -1,0 +1,125 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Update Feedback - Admin Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">Update Feedback</h1>
+  
+  <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <form method="POST" style="display: flex; flex-direction: column;">
+        {% csrf_token %}
+        
+        <!-- Produit field with error message -->
+        <div>
+          {{ form.produit.label_tag }} 
+          {{ form.produit }}
+          {% if form.produit.errors %}
+            <div class="form-error">
+              <ul>
+                {% for error in form.produit.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Commentaire field with error message -->
+        <div style="margin-top: 10px;">
+          {{ form.commentaire.label_tag }} 
+          {{ form.commentaire }}
+          {% if form.commentaire.errors %}
+            <div class="form-error">
+              <ul>
+                {% for error in form.commentaire.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Star Rating -->
+        <div class="star-rating" style="margin-top: 20px;">
+          <label for="id_note">Rating:</label>
+          <div id="star-rating">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+          </div>
+          <!-- Displaying rating errors -->
+          {% if form.note.errors %}
+            <div class="form-error">
+              <ul>
+                {% for error in form.note.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Hidden field for rating -->
+        {{ form.note }}
+
+        <!-- Submit button -->
+        <button type="submit" style="background-color: #65412b; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+          Update
+        </button>
+    </form>
+
+ 
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const stars = document.querySelectorAll('#star-rating .star');
+      const noteInput = document.getElementById('id_note');
+
+      // Préremplir les étoiles selon la note actuelle
+      const currentRating = parseInt(noteInput.value, 10);
+      if (currentRating) {
+        stars.forEach(s => {
+          if (s.getAttribute('data-value') <= currentRating) {
+            s.style.color = 'gold';  // Mettre à jour les étoiles en doré si elles sont sélectionnées
+          }
+        });
+      }
+
+      // Ajouter un événement de clic sur chaque étoile
+      stars.forEach(star => {
+        star.addEventListener('click', function() {
+          const rating = this.getAttribute('data-value');
+          noteInput.value = rating;  // Mettre à jour la note dans le champ caché
+
+          // Mettre à jour le style des étoiles pour refléter la sélection
+          stars.forEach(s => {
+            if (s.getAttribute('data-value') <= rating) {
+              s.style.color = 'gold';  // Étoiles sélectionnées en or
+            } else {
+              s.style.color = 'gray';  // Étoiles non sélectionnées en gris
+            }
+          });
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .star {
+      font-size: 2em;
+      cursor: pointer;
+      color: gray;
+    }
+    .star:hover {
+      color: gold;
+    }
+    .form-error {
+      color: red;
+      font-size: 0.9em;
+    }
+  </style>
+
+{% endblock %}
