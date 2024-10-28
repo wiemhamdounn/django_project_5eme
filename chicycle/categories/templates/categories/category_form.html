@@ -1,0 +1,14 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}All Products - Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<h1>{% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} une Catégorie</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enregistrer</button>
+</form>
+<a href="{% url 'category_list' %}">Annuler</a>
+{% endblock %}

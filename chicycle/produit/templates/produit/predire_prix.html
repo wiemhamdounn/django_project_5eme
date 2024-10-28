@@ -1,0 +1,44 @@
+
+
+{% extends 'base_admin.html' %}
+
+{% block title %}All Products - Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="type">Type:</label>
+    <input type="text" id="type" name="type" required><br>
+
+    <label for="couleur">Couleur:</label>
+    <input type="text" id="couleur" name="couleur" required><br>
+
+    <label for="taille">Taille:</label>
+    <input type="text" id="taille" name="taille" required><br>
+
+    <label for="genre">Genre:</label>
+    <input type="text" id="genre" name="genre" required><br>
+
+    <button type="submit">Prédire Prix</button>
+</form>
+
+<!-- Afficher le prix prédit si disponible -->
+{% if message is not None %}
+    <p>Prix prédit : {{ message }} DT</p>
+    
+
+    <form action="{% url 'add_product_view' %}" method="get">
+        {% if nouveau_produit_data %}
+            <input type="hidden" name="type" value="{{ nouveau_produit_data.type }}">
+            <input type="hidden" name="couleur" value="{{ nouveau_produit_data.couleur }}">
+            <input type="hidden" name="taille" value="{{ nouveau_produit_data.taille }}">
+            <input type="hidden" name="genre" value="{{ nouveau_produit_data.genre }}">
+            <input type="hidden" name="prix_predite" value="{{ prix_predite }}">
+        {% endif %}
+        <button type="submit">Add this product</button>
+    </form>
+{% endif %}
+
+    <a href="{% url 'liste_produits' %}">Retour à la liste</a>
+{% endblock %}

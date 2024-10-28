@@ -1,0 +1,90 @@
+
+
+    {% extends 'base_admin.html' %}
+
+{% block title %}All Products - Admin Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">All Products</h1>
+  <a href="{% url 'ajouter_produit' %}" style="padding: 10px 20px; color: white; background: linear-gradient(135deg, #4f5850, #4f5850); border-radius: 8px; text-decoration: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); font-weight: bold; transition: transform 0.2s ease;">Ajouter un produit</a>
+    <a href="{% url 'predire_prix' %}" style="padding: 10px 20px; color: white; background: linear-gradient(135deg, #4f5850, #4f5850); border-radius: 8px; text-decoration: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); font-weight: bold; transition: transform 0.2s ease;">Predire un produit</a>
+    <br>
+    <br>
+  <div style="overflow-x: auto; margin-bottom: 30px;">
+    <table style="width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      <thead>
+        <tr style="background-color: #65412b; color: #ebe6e4;">
+          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Nom</th>
+          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Type</th>
+          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Couleur</th>
+          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Taille</th>
+          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #d6c9c4;">Genre</th>
+          <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Description</th>
+          <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Prix</th>
+          <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Stock</th>
+          <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Image</th>
+          <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Catégorie</th>
+          <th style="padding: 12px; text-align: center; border-bottom: 2px solid #d6c9c4;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for produit in produits %}
+        
+        <tr style="border-bottom: 1px solid #d6c9c4;">
+          <td style="padding: 10px;">{{ produit.nom }}</td>
+          <td style="padding: 10px;">{{ produit.type }}</td>
+          <td style="padding: 10px;">{{ produit.couleur }}</td>
+          <td style="padding: 10px;">{{ produit.taille }}</td>
+          <td style="padding: 10px;">{{ produit.genre }}</td>
+          <td style="padding: 10px;">{{ produit.description }}</td>
+          <td style="padding: 10px;">{{ produit.prix }} DT</td> 
+          <td style="padding: 10px;">{{ produit.stock }}</td> 
+          <td>       {% if produit.image %}
+                    
+                
+            <img src="{{produit.image.url}}" alt="{{ produit.nom }}" style="width: 100px; height: auto;">
+ 
+        {% else %}
+            <p>Aucune image disponible</p>  <!-- Afficher un message ou une image par défaut -->
+        {% endif %}
+        </td>
+        <td>
+            {% if produit.category %}
+                {{ produit.category.name }}
+            {% else %}
+                Pas de catégorie
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'update_produit' produit.id %}">Modifier</a>
+            <a href="{% url 'delete_produit' produit.id %}">Supprimer</a>
+        </td>
+    
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 20px; color: #65412b; background-color: #f9f9f9;">No products found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+<br><br>
+    <div class="pagination" style="text-align: center;">
+        <span class="step-links">
+            {% if produits.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ produits.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ produits.number }} of {{ produits.paginator.num_pages }}.
+            </span>
+    
+            {% if produits.has_next %}
+                <a href="?page={{ produits.next_page_number }}">next</a>
+                <a href="?page={{ produits.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+      </div>
+  </div>
+{% endblock %}
