@@ -15,6 +15,7 @@ import requests
 from django.core.files.base import ContentFile
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from collections import Counter
 
 failed_attempts = {}
 
@@ -220,3 +221,22 @@ def generate_ai_avatar_view(request):
         return redirect('user_profile')  # Redirection vers la page utilisateur
     else:
         return redirect('home')
+def update_user_badge_and_role(user):
+    # Mettre à jour le badge et rôle en fonction des points
+    if user.points >= 40:
+        user.badge = "Expert Blogger"
+        user.role = 'user'  # Si l'utilisateur atteint 200 points, il devient admin
+    elif user.points >= 30:
+        user.badge = "Gold"
+        user.role = 'user'  # Ajustez le rôle si nécessaire
+    elif user.points >= 20:
+        user.badge = "Argent"
+        user.role = 'user'
+    elif user.points >= 10:
+        user.badge = "Bronze"
+        user.role = 'contributeur'
+    else:
+        user.badge = None  # Pas de badge si moins de 30 points
+        user.role = 'utilisateur'  # Attribuer un rôle par défaut
+
+    user.save()

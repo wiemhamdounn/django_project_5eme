@@ -9,6 +9,9 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 from keybert import KeyBERT
 from rake_nltk import Rake
+from .views import update_user_badge_and_role
+from transformers import pipeline
+classifier = pipeline("text-classification", model="unitary/toxic-bert")
 
 
 # Liste des articles (Read)
@@ -20,38 +23,44 @@ def list_blogs(request):
 def blog_detail(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     return render(request, 'blog-management/blog_detail.html', {'post': post})
-
-# # Créer un nouvel article (Create)
-# def blog_create(request):
-#     if request.method == 'POST':
-#         form = BlogPostForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Article créé avec succès.')
-#             return redirect('list_blogs')
-#     else:
-#         form = BlogPostForm()
-
-#     return render(request, 'blog-management/blog_form.html', {'form': form})
 def blog_create(request):
+    offensive_message = None  # Variable pour stocker le message offensant
     if request.method == 'POST':
         form = BlogPostForm(request.POST)
         if form.is_valid():
-            # Créer une instance de l'article sans la sauvegarder immédiatement
             post = form.save(commit=False)
+            post.author = request.user
             
-            # Générer l'extrait à partir du contenu
-            post.excerpt = generate_excerpt(post.content)
-            
-            # Ensuite, sauvegarder l'article avec l'extrait
+            # Vérifier si le contenu contient des mots offensants
+            result = classifier(post.content)
+            for prediction in result:
+                label = prediction['label']
+                score = prediction['score']
+                
+                if label == 'toxic' and score > 0.5:  # Ajustez le seuil si nécessaire
+                    offensive_message = f"Le contenu est toxique avec un score de {score:.2f}."
+                    messages.error(request, offensive_message)
+                    return render(request, 'blog-management/blog_form.html', {'form': form, 'offensive_message': offensive_message})
+
+            post.excerpt = generate_excerpt(post.content)  # Génération de l'extrait
             post.save()
-            
-            messages.success(request, 'Article créé avec succès avec extrait généré automatiquement.')
+
+            # Ajouter des points pour l'utilisateur
+            request.user.points += 10  # Ajouter 10 points pour chaque article publié
+            request.user.save()
+
+            # Mettre à jour le badge et le rôle en fonction des nouveaux points
+            update_user_badge_and_role(request.user)
+
+            messages.success(request, 'Article créé avec succès.')
             return redirect('list_blogs')
     else:
         form = BlogPostForm()
 
-    return render(request, 'blog-management/blog_form.html', {'form': form})
+    return render(request, 'blog-management/blog_form.html', {'form': form, 'offensive_message': offensive_message})
+
+
+
 
 
 
@@ -104,3 +113,30 @@ def generate_excerpt_view(request, post_id):
     except Exception as e:
         messages.error(request, f'Erreur lors de la génération de l\'extrait : {e}')
     
+def detect_offensive_language(text):
+    result = classifier(text)
+    print(f"Resultat pour '{text}': {result}")  # Ajoutez cette ligne pour le débogage
+    for prediction in result:
+        label = prediction['label']
+        score = prediction['score']
+        print(f"Label: {label}, Score: {score}")  # Débogage
+        if label == 'TOXIC' and score > 0.5:  # Ajustez le seuil si nécessaire
+            return True  # Texte offensant détecté
+    return False  # Aucun langage offensant détecté
+
+# Tester avec des phrases
+test_phrases = [
+    "Ce texte contient un mot comme idiot.",
+    "Vous êtes vraiment un imbécile.",
+    "C'est un bon article sans mauvais langage.",
+    "Ce n'est pas bien de dire des gros mots comme putain.",
+    "Je pense que ce terme est raciste.",
+    "Tout va bien ici, rien de toxique.",
+    "Allez vous faire foutre, c'est inacceptable !"
+]
+
+for phrase in test_phrases:
+    if detect_offensive_language(phrase):
+        print(f"Offensant : {phrase}")
+    else:
+        print(f"Propre : {phrase}")

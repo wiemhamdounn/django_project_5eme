@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.login_view, name='login'),
+    path('', views.login_view, name='login'),
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('user_dashboard/', views.user_dashboard, name='user_dashboard'),
     path('register/', views.register_view, name='register'),  # URL d'inscription
@@ -25,7 +25,7 @@ urlpatterns = [
     path('users/unban/<int:user_id>/', views.unban_user, name='unban_user'),
 
     # Gestion des articles de blog avec viewsBlog
-    path('', viewsBlog.list_blogs, name='list_blogs'),  # Liste des articles
+    path('post/listPost', viewsBlog.list_blogs, name='list_blogs'),  # Liste des articles
     path('post/<int:pk>/', viewsBlog.blog_detail, name='blog_detail'),  # Détail d'un article
     path('post/new/', viewsBlog.blog_create, name='blog_create'), # Créer un article
     path('post/<int:pk>/edit/', viewsBlog.blog_update, name='blog_update'),  # Modifier un article

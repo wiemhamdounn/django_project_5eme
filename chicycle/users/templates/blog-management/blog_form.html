@@ -9,6 +9,10 @@
         {% if form.instance.pk %} Modifier l'article {% else %} Créer un nouvel
         article {% endif %}
       </h1>
+      {% if offensive_detected %}
+      <p style="color: red">Le contenu soumis contenait des mots offensants.</p>
+      {% endif %}
+
       <p class="text-muted animate__animated animate__fadeInUp">
         {% if form.instance.pk %} Mettez à jour votre article pour corriger ou
         ajouter des informations. {% else %} Commencez à partager vos idées avec
@@ -48,6 +52,9 @@
   {% endif %}
 
   <!-- Article Form -->
+  {% if offensive_message %}
+  <p style="color: red">{{ offensive_message }}</p>
+  {% endif %}
   <div class="row justify-content-center mt-4">
     <div class="col-md-8">
       {% if request.user.is_authenticated %}
@@ -55,7 +62,6 @@
         <div class="card-body p-5">
           <form method="post">
             {% csrf_token %} {{ form.as_p }}
-
             <div class="d-flex justify-content-between mt-3">
               <button type="submit" class="btn btn-primary btn-lg shadow">
                 {% if form.instance.pk %}

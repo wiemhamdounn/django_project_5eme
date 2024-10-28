@@ -33,8 +33,7 @@ Administrateur - {{ user.username }}{% endblock %} {% block content %}
 
       <p>
         <strong>Dernière connexion :</strong>
-        {% if user.last_login %} {{ user.last_login|date:"d/m/Y H:i" }} {% else
-        %} Jamais connecté {% endif %}
+         {{ user.last_login|date:"d/m/Y H:i" }}
       </p>
 
       <p><strong>Rôle :</strong> Administrateur</p>
