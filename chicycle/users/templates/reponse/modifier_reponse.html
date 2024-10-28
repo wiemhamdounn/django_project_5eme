@@ -1,0 +1,47 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Update Response - Admin Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">Update Response</h1>
+
+  <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <!-- Affichage des erreurs globales du formulaire -->
+    {% if form.non_field_errors %}
+      <div class="form-errors" style="color: red;">
+        <ul>
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <!-- Le formulaire de mise à jour -->
+    <form method="post" style="display: flex; flex-direction: column;">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <!-- Affichage des erreurs spécifiques aux champs -->
+      {% if form.errors %}
+        <div class="form-errors">
+          <ul>
+            {% for field, errors in form.errors.items %}
+              <li>{{ field }}: {{ errors|join:", " }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <button type="submit" style="background-color: #65412b; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+        Update
+      </button>
+    </form>
+
+    <!-- Lien pour retourner aux détails de l'avis -->
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="{% url 'detail_avis' reponse.avis.id %}" style="color: #65412b; text-decoration: none;">Return to Feedback details</a>
+    </div>
+  </div>
+
+{% endblock %}

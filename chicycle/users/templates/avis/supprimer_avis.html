@@ -1,0 +1,24 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Delete Feedback - Admin Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">Delete Feedback</h1>
+  
+  <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <p style="text-align: center; margin-bottom: 20px;">Are you sure you want to delete the following feedback?</p>
+    <p><strong>Product :</strong> {{ avis.produit }}</p>
+    <p><strong>Comment :</strong> {{ avis.commentaire }}</p>
+    <p><strong>Note :</strong> {{ avis.note }} / 5</p>
+
+    <form method="POST" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #d9534f; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Confirm 
+        </button>
+        <a href="{% url 'liste_avis' %}" style="background-color: #65412b; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">
+            Cancel
+        </a>
+    </form>
+  </div>
+{% endblock %}

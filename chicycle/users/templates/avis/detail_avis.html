@@ -1,0 +1,52 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Feedback Detail - Admin Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">Feedback Detail</h1>
+  
+  <div style="max-width: 800px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+    <!-- Détails de l'avis -->
+    <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+      <p><strong>User:</strong> {{ avis.utilisateur }}</p>
+      <p><strong>Product:</strong> {{ avis.produit }}</p>
+      <p><strong>Comment:</strong> {{ avis.commentaire }}</p>
+      <p><strong>Rating:</strong> {{ avis.note }} / 5</p>
+      <p><strong>Date:</strong> {{ avis.date_creation }}</p>
+    </div>
+
+    <!-- Liste des réponses -->
+    <h2 style="color: #65412b; text-align: center; margin-bottom: 10px;">Respons</h2>
+    {% if reponses %}
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+        {% for reponse in reponses %}
+          <div style="background-color: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <p><strong>{{ reponse.utilisateur.username }}</strong> replied :</p>
+            <p style="color: #555;">{{ reponse.commentaire }}</p>
+            <p style="font-size: 12px; color: #888;">{{ reponse.date_creation }}</p>
+            <div style="text-align: right;">
+              <a href="{% url 'modifier_reponse' reponse.id %}" style="padding: 8px 12px; background-color: #cfbf79; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">Update</a>
+              <a href="{% url 'supprimer_reponse' reponse.id %}" style="padding: 8px 12px; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 4px;">Delete</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="text-align: center; color: #888;">no response for this feedback</p>
+    {% endif %}
+
+    <!-- Ajouter une réponse -->
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="{% url 'creer_reponse' avis.id %}" style="padding: 10px 20px; background-color: #7fbc98; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">Answer</a>
+    </div>
+
+    <!-- Boutons d'actions sur l'avis -->
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="{% url 'modifier_avis' avis.id %}" style="padding: 10px 20px; background-color: #cfbf79; color: white; text-decoration: none; border-radius: 5px; margin-right: 10px;">Update</a>
+      <a href="{% url 'supprimer_avis' avis.id %}" style="padding: 10px 20px; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 5px;">Delete</a>
+    </div>
+
+
+   
+  </div>
+{% endblock %}

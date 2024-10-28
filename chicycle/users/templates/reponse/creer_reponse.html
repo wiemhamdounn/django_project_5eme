@@ -1,0 +1,71 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Create Response - Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center; color: #65412b; margin-bottom: 20px;">Reply to review on {{ avis.produit }}</h1>
+
+<div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <form method="POST" style="display: flex; flex-direction: column;">
+        {% csrf_token %}
+        
+        <!-- Champ commentaire -->
+        <div>
+            {{ form.commentaire.label_tag }} 
+            {{ form.commentaire }}
+            <!-- Affichage des erreurs spécifiques pour le champ commentaire -->
+            {% if form.commentaire.errors %}
+                <div class="form-error">
+                    <ul>
+                        {% for error in form.commentaire.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Affichage des erreurs si le formulaire global contient des erreurs -->
+        {% if form.errors %}
+            <div class="form-errors">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        <li>{{ field }}: {{ errors|join:", " }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Section pour la suggestion automatique -->
+        {% if suggestion %}
+            <div style="margin-top: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">
+                <h4>Suggested response:</h4>
+                <p>{{ suggestion }}</p>
+                <button type="button" onclick="fillSuggestedResponse()" style="background-color: #65412b; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Use Suggested Response</button>
+            </div>
+        {% endif %}
+
+        <button type="submit" style="background-color: #65412b; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+            Submit
+        </button>
+    </form>
+
+    <a href="{% url 'detail_avis' avis.id %}" style="color: #65412b; text-decoration: none; margin-top: 20px;">Return to Feedback details</a>
+</div>
+
+<script>
+function fillSuggestedResponse() {
+    // Remplit automatiquement le champ 'commentaire' avec la suggestion
+    document.getElementById('id_commentaire').value = "{{ suggestion|escapejs }}";
+}
+</script>
+
+<style>
+  .form-error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+  }
+</style>
+
+{% endblock %}
