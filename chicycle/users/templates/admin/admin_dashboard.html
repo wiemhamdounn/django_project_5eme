@@ -175,8 +175,8 @@
       {% load static %}
       <img src="{% static 'assets/LogoWhite.png' %}" width="170px" height="80px">
       <ul>
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Profile</a></li>
+        <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'admin_profile' %}">Profile</a></li>
         <li>
           <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}

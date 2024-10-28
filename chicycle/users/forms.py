@@ -1,5 +1,8 @@
 from django import forms
 from .models import CustomUser
+from .models import BlogPost
+
+
 from .models import Avis
 from .models import Reponse
 from django.core.exceptions import ValidationError
@@ -9,6 +12,17 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'password', 'role']
+class UpdateProfileImageForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['image']
+        widgets = { 'image': forms.FileInput(attrs={'class': 'form-control-file'}),
+        }
+
+class BlogPostForm(forms.ModelForm):
+    class Meta:
+        model = BlogPost
+        fields = ['title', 'content']
 
 
 class AvisForm(forms.ModelForm):
@@ -34,3 +48,4 @@ class ReponseForm(forms.ModelForm):
         if len(commentaire) < 5:
             raise ValidationError('The response must contain at least 5 characters.')
         return commentaire
+

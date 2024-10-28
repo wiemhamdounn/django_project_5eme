@@ -1,0 +1,114 @@
+{% extends 'base_user.html' %} {% block content %}
+<div class="container mt-5">
+  <div class="blog-post">
+    <!-- Titre de l'article -->
+    <h1 class="blog-title">{{ post.title }}</h1>
+
+    <!-- Date de publication -->
+    <p class="blog-date text-muted">
+      Publié le {{ post.created_at|date:"d M Y" }}
+    </p>
+
+    <!-- Contenu de l'article -->
+    <div class="blog-content">
+      <p>{{ post.content }}</p>
+    </div>
+
+    <!-- Boutons d'action (Modifier, Supprimer, Retour à la liste) -->
+    <div class="blog-actions mt-4">
+      <a
+        href="{% url 'blog_update' post.id %}"
+        class="btn btn-primary action-btn update"
+        >✏️ Modifier</a
+      >
+      <a
+        href="{% url 'blog_delete' post.id %}"
+        class="btn btn-danger action-btn delete"
+        >🗑️ Supprimer</a
+      >
+      <a href="{% url 'list_blogs' %}" class="btn btn-secondary action-btn back"
+        >← Retour à la liste des articles</a
+      >
+    </div>
+  </div>
+</div>
+
+<!-- Style pour la page -->
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .blog-title {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+
+  .blog-date {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+  }
+
+  .blog-content {
+    font-size: 1.2em;
+    line-height: 1.8;
+    color: #34495e;
+  }
+
+  .blog-content p {
+    margin-bottom: 20px;
+  }
+
+  .blog-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .action-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+  }
+
+  .btn-primary {
+    background-color: #3498db;
+  }
+
+  .btn-primary:hover {
+    background-color: #2980b9;
+  }
+
+  .btn-danger {
+    background-color: #e74c3c;
+  }
+
+  .btn-danger:hover {
+    background-color: #c0392b;
+  }
+
+  .btn-secondary {
+    background-color: #95a5a6;
+  }
+
+  .btn-secondary:hover {
+    background-color: #7f8c8d;
+  }
+
+  .btn {
+    transition: background-color 0.2s ease;
+  }
+
+  .blog-actions .btn {
+    display: inline-block;
+  }
+</style>
+
+{% endblock %}
